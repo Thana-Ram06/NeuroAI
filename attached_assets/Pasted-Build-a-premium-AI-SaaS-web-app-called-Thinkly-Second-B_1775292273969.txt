@@ -1,0 +1,157 @@
+Build a premium AI SaaS web app called **"Thinkly" (Second Brain AI)** using Next.js (App Router). The app must be fully deployable on Vercel and use Firebase as the database. Do NOT use Express or any custom server.
+
+## CORE IDEA
+
+A personal AI-powered "second brain" where users can:
+
+* Save thoughts, notes, and ideas
+* Automatically organize and summarize them
+* Ask AI questions based on their stored thoughts
+
+## TECH STACK
+
+* Next.js 14+ (App Router)
+* Tailwind CSS
+* Firebase (Firestore + optional Auth)
+* OpenAI API (server-side only)
+* Vercel deployment ready
+
+## FEATURES (MVP)
+
+### 1. Add Thoughts
+
+* Input box to write thoughts
+* Save to Firebase Firestore
+* Each thought includes:
+
+  * text
+  * createdAt timestamp
+
+### 2. Display Thoughts
+
+* Clean list/grid of thoughts
+* Sorted by latest
+* Minimal UI
+
+### 3. AI Summarization
+
+* Button: "Summarize my thoughts"
+* Sends all user thoughts to OpenAI
+* Returns a short summary
+
+### 4. Ask Your Brain
+
+* Input: "Ask anything about your thoughts"
+* AI answers based ONLY on stored thoughts
+
+## 🔥 OPENAI LOGIC (IMPORTANT)
+
+* Use API route: /app/api/ai/route.js
+* NEVER expose API key on frontend
+* Prompt:
+
+"You are a personal AI brain. Use ONLY the provided user thoughts to answer questions or summarize. Do not make up information. Keep answers clear and helpful."
+
+## FIREBASE SETUP
+
+* Use Firestore
+* Structure:
+
+users/{userId}/thoughts/{thoughtId}
+
+* text
+
+* createdAt
+
+* Use client-side Firebase SDK
+
+## 🎨 UI DESIGN (VERY IMPORTANT – PREMIUM STYLE)
+
+Design inspiration:
+
+* tpot.cc
+* tree.je
+* trackk.me
+
+### Style Rules:
+
+* Extremely minimal
+* Centered layout
+* Max width: max-w-3xl
+* Generous spacing (gap-8)
+* Clean typography focus
+
+### Fonts:
+
+* Headings: serif style (like Instrument Serif)
+* Body: Inter
+
+### Colors:
+
+* Background: white or soft gray
+* Text: near black (#111)
+* Borders: subtle gray (#e5e5e5)
+* Single accent color (green button)
+
+### Components:
+
+* Clean cards (rounded-xl, border, no heavy shadow)
+* Large heading: "Thinkly"
+* Subheading: "Your thoughts, organized by AI."
+
+### Buttons:
+
+* Rounded-lg
+* Subtle hover (scale 1.02)
+* No flashy gradients
+
+### Inputs:
+
+* Clean, soft borders
+* Comfortable padding
+
+### UX:
+
+* Smooth fade-in animations
+* Loading states for AI responses
+* Copy button for outputs
+
+## PAGES
+
+### Main Page (/)
+
+* Heading
+* Thought input
+* Thoughts list
+* AI actions (summarize + ask)
+
+## FILE STRUCTURE
+
+/app
+/api/ai/route.js
+/page.tsx
+/layout.tsx
+
+/lib/firebase.js
+
+## ENV VARIABLES
+
+Use:
+
+* OPENAI_API_KEY
+* NEXT_PUBLIC_FIREBASE_API_KEY
+* NEXT_PUBLIC_FIREBASE_PROJECT_ID
+* etc.
+
+## DEPLOYMENT
+
+* Must run with:
+  npm install
+  npm run build
+* Fully compatible with Vercel
+
+## GOAL
+
+The final product must feel like a premium SaaS tool, not AI-generated. Clean, minimal, and elegant UI is critical. Focus on typography, spacing, and simplicity.
+
+Return full working code with all files.
