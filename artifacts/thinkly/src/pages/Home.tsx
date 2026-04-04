@@ -107,7 +107,7 @@ export default function Home() {
       <div className="max-w-3xl mx-auto space-y-12">
         {/* Header */}
         <header className="text-center space-y-3">
-          <h1 className="font-serif text-5xl md:text-6xl text-foreground tracking-tight" data-testid="heading-title">Thinkly</h1>
+          <h1 className="font-serif text-5xl md:text-6xl text-foreground tracking-tight" data-testid="heading-title">NeuroAI</h1>
           <p className="text-muted-foreground text-lg" data-testid="heading-subtitle">Your thoughts, organized by AI.</p>
         </header>
 
