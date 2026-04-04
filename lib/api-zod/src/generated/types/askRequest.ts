@@ -5,7 +5,9 @@
  * Thinkly API - Second Brain AI
  * OpenAPI spec version: 0.1.0
  */
+import type { Thought } from "./thought";
 
-export interface HealthStatus {
-  status: string;
+export interface AskRequest {
+  question: string;
+  thoughts: Thought[];
 }
