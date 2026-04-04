@@ -145,6 +145,9 @@
 @layer base {
   * {
     @apply border-border;
+    transition-property: background-color, border-color, color;
+    transition-timing-function: ease;
+    transition-duration: 200ms;
   }
 
   body {

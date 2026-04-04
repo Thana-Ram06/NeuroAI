@@ -1,0 +1,97 @@
+Update the existing NeuroAI (Second Brain AI) project. Do NOT rebuild the app. Only add and improve the following UI and UX features while keeping the current functionality intact.
+
+## 1. 🌗 THEME TOGGLE (IMPORTANT)
+
+* Add a theme toggle button at the top (navbar or top-right)
+* Toggle between Light and Dark mode
+* Save user preference using localStorage
+* Smooth transition between themes
+
+### Dark Mode Style:
+
+* Background: dark gray (#0f0f0f or similar)
+* Cards: slightly lighter gray (#1a1a1a)
+* Text: white or light gray
+* Borders: subtle dark borders
+
+---
+
+## 2. 📄 ABOUT SECTION
+
+* Add an "About" option in the top section (navbar)
+* When clicked, scroll to or open an About section
+
+### About Content:
+
+Explain clearly:
+
+* What NeuroAI is
+* How it works:
+
+  * Users write thoughts
+  * AI organizes and summarizes them
+  * Users can ask questions based on their thoughts
+
+Keep it clean, minimal, and professional (not too long)
+
+---
+
+## 3. 📜 FOOTER UPDATE
+
+Improve footer with:
+
+### Left:
+
+* "© 2026 NeuroAI. All rights reserved."
+
+### Center or below:
+
+* Add clickable "Terms & Conditions"
+* Add clickable "Privacy Policy"
+
+(They can be simple placeholder pages or modal text)
+
+### Right:
+
+* Keep social icon if exists
+
+---
+
+## 4. 🎨 UI POLISH (IMPORTANT)
+
+* Ensure everything matches premium minimal SaaS style
+* Improve spacing (more breathing room)
+* Keep clean typography
+* Maintain tpot.cc / tree.je inspired design
+
+---
+
+## 5. 📱 RESPONSIVE DESIGN
+
+* Ensure:
+
+  * Navbar adapts on mobile
+  * Footer stacks properly
+  * Buttons and inputs are touch-friendly
+
+---
+
+## 6. ✨ MICRO INTERACTIONS
+
+* Smooth hover effects
+* Subtle transitions (200ms)
+* Theme toggle animation
+
+---
+
+## FINAL GOAL
+
+Make the app feel like a polished, premium SaaS product with:
+
+* Dark/light mode
+* Clear About section
+* Proper footer with legal links
+
+Do not change backend or core logic. Only improve UI and UX.
+
+Return updated code.
