@@ -1,0 +1,152 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Thinkly API - Second Brain AI
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: ai
+    description: AI operations (summarize, ask)
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /ai/summarize:
+    post:
+      operationId: summarizeThoughts
+      tags: [ai]
+      summary: Summarize all thoughts
+      description: Sends thoughts to OpenAI and returns a concise summary
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SummarizeRequest"
+      responses:
+        "200":
+          description: Summary returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /ai/ask:
+    post:
+      operationId: askBrain
+      tags: [ai]
+      summary: Ask a question about thoughts
+      description: Sends a question and all thoughts to OpenAI and returns an answer based on stored thoughts only
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AskRequest"
+      responses:
+        "200":
+          description: Answer returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    Thought:
+      type: object
+      properties:
+        text:
+          type: string
+        createdAt:
+          type: string
+      required:
+        - text
+        - createdAt
+
+    SummarizeRequest:
+      type: object
+      properties:
+        thoughts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Thought"
+      required:
+        - thoughts
+
+    AskRequest:
+      type: object
+      properties:
+        question:
+          type: string
+        thoughts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Thought"
+      required:
+        - question
+        - thoughts
+
+    AiResponse:
+      type: object
+      properties:
+        result:
+          type: string
+      required:
+        - result
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
