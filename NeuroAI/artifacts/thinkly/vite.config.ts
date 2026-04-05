@@ -4,44 +4,39 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
-const rawPort = process.env.PORT;
+const isReplit = process.env.REPL_ID !== undefined;
+const isDev = process.env.NODE_ENV !== "production";
 
-if (!rawPort) {
-  throw new Error(
-    "PORT environment variable is required but was not provided.",
-  );
-}
-
-const port = Number(rawPort);
-
-if (Number.isNaN(port) || port <= 0) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
-}
-
-const basePath = process.env.BASE_PATH;
-
-if (!basePath) {
-  throw new Error(
-    "BASE_PATH environment variable is required but was not provided.",
-  );
-}
+const port = Number(process.env.PORT ?? 5173);
+const basePath = process.env.BASE_PATH ?? "/";
 
 export default defineConfig({
   base: basePath,
   define: {
-    "import.meta.env.VITE_FIREBASE_API_KEY": JSON.stringify(process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? ""),
-    "import.meta.env.VITE_FIREBASE_AUTH_DOMAIN": JSON.stringify(process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ?? ""),
-    "import.meta.env.VITE_FIREBASE_PROJECT_ID": JSON.stringify(process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? ""),
-    "import.meta.env.VITE_FIREBASE_STORAGE_BUCKET": JSON.stringify(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? ""),
-    "import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID": JSON.stringify(process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ?? ""),
-    "import.meta.env.VITE_FIREBASE_APP_ID": JSON.stringify(process.env.NEXT_PUBLIC_FIREBASE_APP_ID ?? ""),
+    "import.meta.env.VITE_FIREBASE_API_KEY": JSON.stringify(
+      process.env.VITE_FIREBASE_API_KEY ?? process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? ""
+    ),
+    "import.meta.env.VITE_FIREBASE_AUTH_DOMAIN": JSON.stringify(
+      process.env.VITE_FIREBASE_AUTH_DOMAIN ?? process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ?? ""
+    ),
+    "import.meta.env.VITE_FIREBASE_PROJECT_ID": JSON.stringify(
+      process.env.VITE_FIREBASE_PROJECT_ID ?? process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ?? ""
+    ),
+    "import.meta.env.VITE_FIREBASE_STORAGE_BUCKET": JSON.stringify(
+      process.env.VITE_FIREBASE_STORAGE_BUCKET ?? process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ?? ""
+    ),
+    "import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID": JSON.stringify(
+      process.env.VITE_FIREBASE_MESSAGING_SENDER_ID ?? process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ?? ""
+    ),
+    "import.meta.env.VITE_FIREBASE_APP_ID": JSON.stringify(
+      process.env.VITE_FIREBASE_APP_ID ?? process.env.NEXT_PUBLIC_FIREBASE_APP_ID ?? ""
+    ),
   },
   plugins: [
     react(),
     tailwindcss(),
-    runtimeErrorOverlay(),
-    ...(process.env.NODE_ENV !== "production" &&
-    process.env.REPL_ID !== undefined
+    ...(isDev ? [runtimeErrorOverlay()] : []),
+    ...(isDev && isReplit
       ? [
           await import("@replit/vite-plugin-cartographer").then((m) =>
             m.cartographer({
