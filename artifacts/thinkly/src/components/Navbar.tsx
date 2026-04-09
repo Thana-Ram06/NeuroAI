@@ -12,7 +12,10 @@ export default function Navbar({ onAboutClick }: NavbarProps) {
   return (
     <nav className="w-full border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50 transition-colors duration-300">
       <div className="max-w-3xl mx-auto px-4 md:px-8 h-14 flex items-center justify-between">
-        <span className="font-serif text-lg text-foreground tracking-tight select-none">NeuroAI</span>
+        <div className="flex items-center gap-2 select-none">
+          <img src="/logo.png" alt="NeuroAI logo" className="w-7 h-7 object-contain dark:invert" />
+          <span className="font-serif text-lg text-foreground tracking-tight">NeuroAI</span>
+        </div>
 
         <div className="flex items-center gap-1">
           <Button
