@@ -80,7 +80,17 @@ export default function Footer() {
       <footer className="w-full border-t border-border mt-24 py-8 transition-colors duration-300">
         <div className="max-w-3xl mx-auto px-4 md:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <span className="order-2 sm:order-1">© 2026 NeuroAI. All rights reserved.</span>
+            <span className="order-2 sm:order-1">
+              © 2026 NeuroAI. All rights reserved. · Made by{" "}
+              <a
+                href="https://x.com/tr_dev06"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors duration-200 underline-offset-4 hover:underline"
+              >
+                me
+              </a>
+            </span>
             <div className="order-1 sm:order-2 flex items-center gap-4">
               <button
                 onClick={() => setShowTerms(true)}
