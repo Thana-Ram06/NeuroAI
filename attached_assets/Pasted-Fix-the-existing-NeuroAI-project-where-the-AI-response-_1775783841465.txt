@@ -1,0 +1,118 @@
+Fix the existing NeuroAI project where the AI response is not showing and the loading spinner keeps spinning forever.
+
+Do NOT rebuild the project. Only fix the API integration and frontend handling.
+
+---
+
+## PROBLEM
+- User clicks analyze/summarize
+- Loading spinner appears
+- No response is shown
+- Likely Gemini API response is not parsed correctly OR frontend is not handling response/errors
+
+---
+
+## 1. FIX API ROUTE (CRITICAL)
+
+Update /app/api/ai/route.js:
+
+- Use @google/genai
+- Ensure proper response parsing
+
+IMPORTANT:
+Gemini response is NOT directly response.text
+
+Extract text like this:
+
+const text = response?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+Return:
+
+return Response.json({
+  result: text || "No response from AI"
+});
+
+---
+
+## 2. ADD ERROR HANDLING
+
+Wrap everything in try-catch:
+
+catch (error) {
+  console.error("Gemini Error:", error);
+  return Response.json(
+    { error: error.message || "Something went wrong" },
+    { status: 500 }
+  );
+}
+
+---
+
+## 3. ADD DEBUG LOG
+
+Add:
+
+console.log("Gemini raw response:", response);
+
+---
+
+## 4. FIX FRONTEND FETCH (VERY IMPORTANT)
+
+Ensure frontend:
+
+- Stops loading spinner ALWAYS
+- Handles errors properly
+
+Use:
+
+setLoading(true);
+
+try {
+  const res = await fetch("/api/ai", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ thoughts, question, mode }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || "Request failed");
+  }
+
+  setResult(data.result);
+
+} catch (err) {
+  console.error(err);
+  alert(err.message);
+} finally {
+  setLoading(false); // MUST STOP SPINNER
+}
+
+---
+
+## 5. ADD FALLBACK TEST
+
+Temporarily test API route:
+
+return Response.json({ result: "API working ✅" });
+
+If this works → frontend is correct
+
+---
+
+## 6. VALIDATION
+
+- Ensure thoughts array is not empty
+- Show error if empty
+
+---
+
+## FINAL GOAL
+
+- AI response should appear correctly
+- Spinner should stop after response or error
+- Errors should be visible (not silent)
+- Gemini integration must work properly
+
+Return updated files only.
