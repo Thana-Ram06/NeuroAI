@@ -1,15 +1,14 @@
 import { Router, type IRouter } from "express";
-import OpenAI from "openai";
+import { GoogleGenAI } from "@google/genai";
 import { SummarizeThoughtsBody, AskBrainBody } from "@workspace/api-zod";
-import { logger } from "../lib/logger";
 
 const router: IRouter = Router();
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY ?? "",
 });
 
-const SYSTEM_PROMPT =
+const SYSTEM_CONTEXT =
   "You are a personal AI brain. Use ONLY the provided user thoughts to answer questions or summarize. Do not make up information. Keep answers clear and helpful.";
 
 router.post("/ai/summarize", async (req, res): Promise<void> => {
@@ -26,27 +25,20 @@ router.post("/ai/summarize", async (req, res): Promise<void> => {
     return;
   }
 
-  const thoughtsText = thoughts
-    .map((t, i) => `${i + 1}. ${t.text}`)
-    .join("\n");
+  const thoughtsText = thoughts.map((t, i) => `${i + 1}. ${t.text}`).join("\n");
+
+  const prompt = `${SYSTEM_CONTEXT}\n\nHere are my thoughts:\n\n${thoughtsText}\n\nPlease provide a concise summary of these thoughts.`;
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        {
-          role: "user",
-          content: `Here are my thoughts:\n\n${thoughtsText}\n\nPlease provide a concise summary of these thoughts.`,
-        },
-      ],
-      max_tokens: 500,
+    const response = await ai.models.generateContent({
+      model: "gemini-1.5-flash",
+      contents: prompt,
     });
 
-    const result = completion.choices[0]?.message?.content ?? "";
+    const result = response.text ?? "";
     res.json({ result });
   } catch (err) {
-    req.log.error({ err }, "OpenAI summarize error");
+    console.error("Gemini summarize error:", err);
     res.status(500).json({ error: "Failed to generate summary. Please try again." });
   }
 });
@@ -70,27 +62,20 @@ router.post("/ai/ask", async (req, res): Promise<void> => {
     return;
   }
 
-  const thoughtsText = thoughts
-    .map((t, i) => `${i + 1}. ${t.text}`)
-    .join("\n");
+  const thoughtsText = thoughts.map((t, i) => `${i + 1}. ${t.text}`).join("\n");
+
+  const prompt = `${SYSTEM_CONTEXT}\n\nHere are my thoughts:\n\n${thoughtsText}\n\nQuestion: ${question}\n\nAnswer based ONLY on the thoughts provided above.`;
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        {
-          role: "user",
-          content: `Here are my thoughts:\n\n${thoughtsText}\n\nQuestion: ${question}\n\nAnswer based ONLY on the thoughts provided above.`,
-        },
-      ],
-      max_tokens: 500,
+    const response = await ai.models.generateContent({
+      model: "gemini-1.5-flash",
+      contents: prompt,
     });
 
-    const result = completion.choices[0]?.message?.content ?? "";
+    const result = response.text ?? "";
     res.json({ result });
   } catch (err) {
-    req.log.error({ err }, "OpenAI ask error");
+    console.error("Gemini ask error:", err);
     res.status(500).json({ error: "Failed to generate answer. Please try again." });
   }
 });
